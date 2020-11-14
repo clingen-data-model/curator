@@ -1,0 +1,9 @@
+;; shadow-cljs configuration
+{:source-paths ["src"]
+ :dependencies [[re-frame "1.1.2"]
+                [re-graph "0.1.12"]]
+ :dev-http {8080 "public/"}
+ :builds {:app {:output-dir "public/js"
+                :asset-path "/public/js"
+                :target :browser
+                :modules {:core {:init-fn curator/init}}}}}
