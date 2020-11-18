@@ -6,4 +6,5 @@
  :builds {:app {:output-dir "public/js"
                 :asset-path "/public/js"
                 :target :browser
-                :modules {:core {:init-fn curator/init}}}}}
+                ;; :js-options {:entry-keys ["module" "browser" "main"]}
+                :modules {:curator {:init-fn curator/init}}}}}
