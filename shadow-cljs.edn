@@ -1,7 +1,8 @@
 ;; shadow-cljs configuration
 {:source-paths ["src"]
- :dependencies [[re-frame "1.1.2"]
-                [re-graph "0.1.12"]]
+ :dependencies [[re-frame "1.1.1"]
+                [re-graph "0.1.14"]
+                [metosin/reitit "0.5.10"]]
  :dev-http {8080 "public/"}
  :builds {:app {:output-dir "public/js"
                 :asset-path "/public/js"

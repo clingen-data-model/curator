@@ -4,8 +4,12 @@
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [re-frame.core :as re-frame :refer [subscribe dispatch]]
+            [re-graph.core :as re-graph]
             [curator.pages.home.views :as home]
-            [curator.common.views :as common-views]))
+            [curator.common.views :as common-views]
+            [curator.routes :as routes]))
+
+(enable-console-print!)
 
 (def firebase-config
   #js {:apiKey "AIzaSyCbBq1o5ZiVB5UflVNN-zCULAIRGgkHtrk"
@@ -23,10 +27,20 @@
 
 (defn ^:dev/after-load mount-root []
   (println "[main] reloaded lib:")
-  (rdom/render [main-page]
+  (rdom/render [home/home]
                (.getElementById js/document "app")))
 
+(re-frame/reg-event-db ::initialize-db
+  (fn [db _]
+    (if db
+      db
+      {:current-route nil})))
+
 (defn ^:export init []
+  (re-frame/dispatch-sync [::initialize-db])
+  (re-frame/dispatch [::re-graph/init 
+                      {:ws {:url "ws://localhost:8888/ws"}
+                       :http {:url "http://localhost:8888/api"}}])
   (firebase/initializeApp firebase-config)
   (-> (firebase/auth)
       .getRedirectResult
