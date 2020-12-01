@@ -42,7 +42,5 @@
                       {:ws {:url "ws://localhost:8888/ws"}
                        :http {:url "http://localhost:8888/api"}}])
   (firebase/initializeApp firebase-config)
-  (-> (firebase/auth)
-      .getRedirectResult
-      (.then #(dispatch [:common/recieve-auth-result %])))
+  (-> (firebase/auth) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
   (mount-root))

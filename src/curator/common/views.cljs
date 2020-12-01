@@ -17,7 +17,7 @@
         [:div.navbar-item
          [:div.buttons
           [:button.button
-           {:on-click #(dispatch [:common/authenticate])}
+           {:on-click #(dispatch [:common/sign-out])}
            [:strong "sign out"]]]]]
        [:div.navbar-end
         [:div.navbar-item
