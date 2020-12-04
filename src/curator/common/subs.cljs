@@ -3,5 +3,5 @@
 
 (re-frame/reg-sub
  ::user
- (fn [{:keys [:user]}]
-   user))
+ (fn [db]
+   (:user db)))

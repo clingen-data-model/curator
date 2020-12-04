@@ -28,7 +28,7 @@
 (re-frame/reg-event-db
  :common/recieve-user-query
  (fn [db [_ {:keys [data errors]}]]
-   (cljs.pprint/pprint data)))
+))
 
 (re-frame/reg-event-fx
  :common/recieve-id-token

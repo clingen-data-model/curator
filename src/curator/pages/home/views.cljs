@@ -38,7 +38,10 @@
                          :type "text"
                          :placeholder topic
                          :on-change #(dispatch [:home/request-suggestions
-                                                (-> % .-target .-value)])}]]]]]
+                                                (-> % .-target .-value)])}]]]]
+
+       ]
+      [:p @(subscribe [::subs/errors])]
       (for [gene suggested-genes]
         [:div.block 
          [:a ](:text gene)

@@ -9,7 +9,7 @@ query ($text: String, $suggester: Suggester) {
     iri
     text
   }
-}")
+")
 
 
 
@@ -32,4 +32,7 @@ query ($text: String, $suggester: Suggester) {
  :home/recieve-suggestions
  (fn [db [_ {:keys [data errors] :as payload}]]
    (.log js/console (str data))
-   (assoc db :home/suggested-genes (:suggest data))))
+   (.log js/console (str errors))
+   (assoc db 
+          :home/suggested-genes (:suggest data)
+          :errors (:message errors))))

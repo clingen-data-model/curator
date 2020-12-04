@@ -6,3 +6,8 @@
  (fn [{:keys [:home/search-topic]}]
    (or search-topic :gene)))
 
+
+(re-frame/reg-sub
+ ::errors
+ (fn [db]
+   (:errors db)))
