@@ -5,3 +5,8 @@
  ::user
  (fn [db]
    (:user db)))
+
+(re-frame/reg-sub
+ ::user-is-registered
+ (fn [db]
+   (:user-is-registered db)))

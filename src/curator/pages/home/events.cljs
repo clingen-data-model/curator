@@ -2,16 +2,13 @@
   (:require [re-frame.core :as re-frame]
             [re-graph.core :as re-graph]))
 
-
 (def suggest-query "
 query ($text: String, $suggester: Suggester) {
   suggest(suggest: $suggester, text: $text) {
     iri
     text
   }
-")
-
-
+}")
 
 (re-frame/reg-event-db
  :home/set-search-topic

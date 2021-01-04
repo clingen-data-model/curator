@@ -3,13 +3,10 @@
             [re-frame.core :as re-frame]
             [re-graph.core :as re-graph]))
 
-(def user-query
+(def current-user-query
 "{
-  genes(curation_activity: GENE_DOSAGE) {
-    gene_list {
-      label
-    }
-    count
+  current_user {
+    label
   }
 }")
 
@@ -28,7 +25,8 @@
 (re-frame/reg-event-db
  :common/recieve-user-query
  (fn [db [_ {:keys [data errors]}]]
-))
+   (when (:current_user data)
+     (assoc db :user-is-registered true))))
 
 (re-frame/reg-event-fx
  :common/recieve-id-token
@@ -42,7 +40,7 @@
          [:dispatch-later
           {:ms 200
            :dispatch [::re-graph/query
-                      user-query
+                      current-user-query
                       {}
                       [:common/recieve-user-query]]}]]}))
 
