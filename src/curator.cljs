@@ -20,14 +20,10 @@
        :messagingSenderId "583560269534"
        :appId "1:583560269534:web:b41fb5f1d09a6ef6fcbc4f"})
 
-(defn main-page []
-  [:div
-   [:section.section (common-views/navbar)]
-   [:section.section.home-search-main (home/home)]])
 
 (defn ^:dev/after-load mount-root []
   (println "[main] reloaded lib:")
-  (rdom/render [home/home]
+  (rdom/render [routes/router-component {:router routes/router}]
                (.getElementById js/document "app")))
 
 (re-frame/reg-event-db ::initialize-db
@@ -42,5 +38,6 @@
                       {:ws {:url "ws://localhost:8888/ws"}
                        :http {:url "http://localhost:8888/api"}}])
   (firebase/initializeApp firebase-config)
+  (routes/init-routes!)
   (-> (firebase/auth) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
   (mount-root))

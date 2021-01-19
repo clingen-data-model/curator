@@ -1,12 +1,23 @@
 (ns curator.routes
   (:require [re-frame.core :as re-frame]
+            [re-graph.core :as re-graph]
             [reagent.core :as reagent]
             [reitit.core :as r]
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
             [reitit.frontend.controllers :as rfc]
             [reitit.frontend.easy :as rfe]
-            [curator.pages.home.views :as home]))
+            [curator.pages.home.views :as home]
+            [curator.pages.admin.views :as admin]))
+
+(def groups-query
+  "{
+  groups_query {
+    label
+    curie
+    iri
+  }
+}")
 
 ;;; Events ;;;
 
@@ -15,6 +26,8 @@
     (if db
       db
       {:current-route nil})))
+
+
 
 (re-frame/reg-event-fx ::push-state
   (fn [db [_ & route]]
@@ -72,15 +85,26 @@
 (def routes
   ["/"
    [""
-    {:name      ::home
-     :view      home-page
-     :link-text "Home"
+    {:name      :home
+     :view      home/home
+     :link-text "home"
      :controllers
      [{;; Do whatever initialization needed for home page
        ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
        :start (fn [& params](js/console.log "Entering home page"))
        ;; Teardown can be done here.
        :stop  (fn [& params] (js/console.log "Leaving home page"))}]}]
+   ["admin"
+    {:name      :admin
+     :view      admin/admin
+     :link-text "admin"
+     :controllers
+     [{;; Do whatever initialization needed for home page
+       ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
+       :start (fn [& params]
+                (js/console.log "Entering admin page"))
+       ;; Teardown can be done here.
+       :stop  (fn [& params] (js/console.log "Leaving admin page"))}]}]
    ["sub-page1"
     {:name      ::sub-page1
      :view      sub-page1
@@ -123,10 +147,16 @@
       ;; Create a normal links that user can click
       [:a {:href (href route-name)} text]])])
 
+;; (defn router-component [{:keys [router]}]
+;;   (let [current-route @(re-frame/subscribe [::current-route])]
+;;     [:div
+;;      [nav {:router router :current-route current-route}]
+;;      (when current-route
+;;        [(-> current-route :data :view)])]))
+
 (defn router-component [{:keys [router]}]
   (let [current-route @(re-frame/subscribe [::current-route])]
     [:div
-     [nav {:router router :current-route current-route}]
      (when current-route
        [(-> current-route :data :view)])]))
 

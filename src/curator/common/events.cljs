@@ -7,8 +7,10 @@
 "{
   current_user {
     label
+    is_admin
   }
 }")
+
 
 (re-frame/reg-event-fx
  :common/authenticate
@@ -16,17 +18,31 @@
    (-> (firebase/auth) 
        (.signInWithRedirect (firebase/auth.GoogleAuthProvider.)))))
 
-(re-frame/reg-event-fx
- :common/sign-out
- (fn [_ _]
+(re-frame/reg-fx
+ :common/firebase-sign-out
+ (fn [_]
    (-> (firebase/auth) 
        (.signOut))))
+
+(re-frame/reg-event-fx
+ :common/sign-out
+ (fn [{:keys [db]} _]
+   {:fx [[:common/firebase-sign-out]]
+    :db (assoc db
+               :user-authorization nil
+               :admin-user nil)}))
+
+
 
 (re-frame/reg-event-db
  :common/recieve-user-query
  (fn [db [_ {:keys [data errors]}]]
-   (when (:current_user data)
-     (assoc db :user-is-registered true))))
+   ;; (cljs.pprint/pprint errors)
+   (if (:current_user data)
+     (assoc db
+            :user-authorization :authorized
+            :admin-user (get-in data [:current_user :is_admin]))
+     (assoc db :user-authorization :unauthorized))))
 
 (re-frame/reg-event-fx
  :common/recieve-id-token
