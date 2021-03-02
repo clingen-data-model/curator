@@ -6,6 +6,7 @@
 query ($text: String, $suggester: Suggester) {
   suggest(suggest: $suggester, text: $text) {
     iri
+    curie
     text
   }
 }")
