@@ -53,9 +53,7 @@
          [:button.button {:type "submit"
                           :on-click #(dispatch [:home/request-search
                                                 topic
-                                                (-> (.getElementById js/document "search-box") .-value)
-                                                ;(-> % .-target .-value)
-                                                ]
+                                                (-> (.getElementById js/document "search-box") .-value)]
                                                )}
           "Search"]]
         ;;;
@@ -72,7 +70,8 @@
           :variation [:div.block.table-container ;.is-widescreen
                       {:style {;:width :100%
                                }}
-                      (let [fields [:iri
+                      (let [fields [;:iri
+                                    :id
                                     :subject
                                     :predicate
                                     ;:object

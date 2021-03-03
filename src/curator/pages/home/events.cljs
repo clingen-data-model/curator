@@ -45,6 +45,7 @@ query ($text: String, $suggester: Suggester) {
 query ($subject: String) {
   clinical_assertions(subject: $subject) {
     iri
+    id
     subject
     predicate
     version
