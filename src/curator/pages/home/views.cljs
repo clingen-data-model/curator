@@ -3,14 +3,15 @@
             [curator.common.views :as common-views]
             [curator.pages.home.subs :as subs]
             [curator.common.subs :as common-subs]
-            [curator.pages.home.events]))
+            [curator.pages.home.events]
+            [reitit.frontend.easy :as rfe]))
 
 
 (defn search []
   (let [topic @(subscribe [::subs/search-topic])
-        suggested-genes []]
+        suggested-genes @(subscribe [::subs/suggested-genes])]
     [:section.section.home-search-main 
-     [:div.columns.has-text-centered
+     [:div.columns
       [:div.column
        [:div.columns
         [:div.column.is-one-fifth.is-offset-one-fifth
@@ -38,14 +39,13 @@
                           :type "text"
                           :placeholder topic
                           :on-change #(dispatch [:home/request-suggestions
-                                                 (-> % .-target .-value)])}]]]]]
-       [:p @(subscribe [::subs/errors])]
-       (for [gene suggested-genes]
-         [:div.block 
-          [:a ](:text gene)
-          (when (seq (:curations gene))
-            [:span.icon
-             [:i.fas.fa-star]])])]]]))
+                                                 (-> % .-target .-value)])}]]]
+         (when (seq suggested-genes)
+           [:div.box
+            (for [gene suggested-genes]
+              [:div.block
+               [:a {:href (rfe/href :genes gene)}
+                (:text gene)]])])]]]]]))
 
 (defn unauthorized-user []
     [:section.hero

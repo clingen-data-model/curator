@@ -8,30 +8,13 @@
             [reitit.frontend.controllers :as rfc]
             [reitit.frontend.easy :as rfe]
             [curator.pages.home.views :as home]
-            [curator.pages.admin.views :as admin]))
-
-(def groups-query
-  "{
-  groups_query {
-    label
-    curie
-    iri
-  }
-}")
+            [curator.pages.admin.views :as admin]
+            [curator.pages.genes.views :as genes]
+            [curator.pages.gene-validity.views :as gene-validity]
+            [curator.pages.genes.events :as gene-events]
+            [curator.pages.gene-validity.events :as gene-validity-events]))
 
 ;;; Events ;;;
-
-(re-frame/reg-event-db ::initialize-db
-  (fn [db _]
-    (if db
-      db
-      {:current-route nil})))
-
-
-
-(re-frame/reg-event-fx ::push-state
-  (fn [db [_ & route]]
-    {:push-state route}))
 
 (re-frame/reg-event-db ::navigated
   (fn [db [_ new-match]]
@@ -44,32 +27,6 @@
 (re-frame/reg-sub ::current-route
   (fn [db]
     (:current-route db)))
-
-;;; Views ;;;
-
-(defn home-page []
-  [:div
-   [:h1 "This is home page"]
-   [:button
-    ;; Dispatch navigate event that triggers a (side)effect.
-    {:on-click #(re-frame/dispatch [::push-state ::sub-page2])}
-    "Go to sub-page 2"]])
-
-(defn sub-page1 []
-  [:div
-   [:h1 "This is sub-page 1"]])
-
-(defn sub-page2 []
-  [:div
-   [:h1 "This is sub-page 2"]])
-
-;;; Effects ;;;
-
-;; Triggering navigation from events.
-
-(re-frame/reg-fx :push-state
-  (fn [route]
-    (apply rfe/push-state route)))
 
 ;;; Routes ;;;
 
@@ -105,20 +62,33 @@
                 (js/console.log "Entering admin page"))
        ;; Teardown can be done here.
        :stop  (fn [& params] (js/console.log "Leaving admin page"))}]}]
-   ["sub-page1"
-    {:name      ::sub-page1
-     :view      sub-page1
-     :link-text "Sub page 1"
+   ["genes/:id"
+    {:name      :genes
+     :view      genes/genes
+     :link-text "genes"
      :controllers
-     [{:start (fn [& params] (js/console.log "Entering sub-page 1"))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
-   ["sub-page2"
-    {:name      ::sub-page2
-     :view      sub-page2
-     :link-text "Sub-page 2"
+     [{;; Do whatever initialization needed for home page
+       ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
+       :parameters {:path [:id]}
+       :start (fn [params]
+                (re-frame/dispatch
+                 [:gene/request-gene (get-in params [:path :id])]))
+       ;; Teardown can be done here.
+       :stop  (fn [& params] (js/console.log "Leaving genes page"))}]}]
+   ["gene_validity/:id"
+    {:name      :gene-validity
+     :view      gene-validity/gene-validity-assertion
+     :link-text "gene validity"
      :controllers
-     [{:start (fn [& params] (js/console.log "Entering sub-page 2"))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 2"))}]}]])
+     [{;; Do whatever initialization needed for home page
+       ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
+       :parameters {:path [:id]}
+       :start (fn [params]
+                (js/console.log "entering gene validity page")
+                (re-frame/dispatch
+                 [:gene-validity/request-assertion (get-in params [:path :id])]))
+       ;; Teardown can be done here.
+       :stop  (fn [& params] (js/console.log "Leaving gene validity page"))}]}]   ])
 
 (defn on-navigate [new-match]
   (when new-match
@@ -136,37 +106,11 @@
     on-navigate
     {:use-fragment true}))
 
-(defn nav [{:keys [router current-route]}]
-  [:ul
-   (for [route-name (r/route-names router)
-         :let       [route (r/match-by-name router route-name)
-                     text (-> route :data :link-text)]]
-     [:li {:key route-name}
-      (when (= route-name (-> current-route :data :name))
-        "> ")
-      ;; Create a normal links that user can click
-      [:a {:href (href route-name)} text]])])
-
-;; (defn router-component [{:keys [router]}]
-;;   (let [current-route @(re-frame/subscribe [::current-route])]
-;;     [:div
-;;      [nav {:router router :current-route current-route}]
-;;      (when current-route
-;;        [(-> current-route :data :view)])]))
-
 (defn router-component [{:keys [router]}]
   (let [current-route @(re-frame/subscribe [::current-route])]
     [:div
      (when current-route
        [(-> current-route :data :view)])]))
 
-;;; Setup ;;;
 
-;; (defn init []
-;;   (re-frame/clear-subscription-cache!)
-;;   (re-frame/dispatch-sync [::initialize-db])
-;;   (dev-setup)
-;;   (init-routes!) ;; Reset routes on figwheel reload
-;;   (reagent/render [router-component {:router router}]
-;;                   (.getElementById js/document "app")))
 
