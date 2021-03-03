@@ -3,7 +3,7 @@
  :dependencies [[re-frame "1.1.1"]
                 [re-graph "0.1.14"]
                 [metosin/reitit "0.5.10"]
-                [cljsjs/firebase "7.24.0"]
+                [cljsjs/firebase "7.5.0-0"]
                 [funcool/cuerdas "2.2.0"]
                 ]
  :nrepl {:port 55555}
