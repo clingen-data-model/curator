@@ -1,0 +1,27 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    name: Release Docker Image
+    steps:
+      - name: Get short SHA
+        id: slug
+        run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+      - name: Login to GCR
+        uses: docker/login-action@v1
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCR_JSON_KEY }}
+      - name: Build & Push to Docker Hub
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: gcr.io/clingen-dev/curator:${{ steps.slug.outputs.sha8 }}
