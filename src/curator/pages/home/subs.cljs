@@ -10,3 +10,8 @@
  ::errors
  (fn [db]
    (:errors db)))
+
+(re-frame/reg-sub
+  ::search-results
+  (fn [db]
+    (:home/search-results db)))
