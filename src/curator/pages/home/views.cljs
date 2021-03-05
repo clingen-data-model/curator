@@ -3,15 +3,17 @@
             [curator.common.views :as common-views]
             [curator.pages.home.subs :as subs]
             [curator.common.subs :as common-subs]
-            [curator.pages.home.events]))
+            [curator.pages.home.events]
+            [reitit.frontend.easy :as rfe]))
 
 
 (defn search []
   (let [topic @(subscribe [::subs/search-topic])
-        suggested-genes []
+<<<<<<< HEAD
+        suggested-genes @(subscribe [::subs/suggested-genes])
         search-results @(subscribe [::subs/search-results])]
     [:section.section.home-search-main
-     [:div.columns.has-text-centered
+     [:div.columns
       [:div.column
        [:div.columns
         ; two fifths, left fifth empty, right fifth dropdown menu
@@ -61,12 +63,12 @@
        [:p @(subscribe [::subs/errors])]
        [:div.container.is-widescreen
         (case topic
-          :gene (for [gene suggested-genes]
-                  [:div.block
-                   [:a] (:text gene)
-                   (when (seq (:curations gene))
-                     [:span.icon
-                      [:i.fas.fa-star]])])
+          :gene (when (seq suggested-genes)
+                  [:div.box
+                   (for [gene suggested-genes]
+                     [:div.block
+                      [:a {:href (rfe/href :genes gene)}
+                       (:text gene)]])])
           :variation [:div.block.table-container ;.is-widescreen
                       {:style {;:width :100%
                                }}
