@@ -1,0 +1,5 @@
+steps:
+- name: gcr.io/clingen-stage/firebase
+  args: ['yarn', 'install']
+- name: gcr.io/clingen-stage/firebase
+  args: ['yarn', 'release']
