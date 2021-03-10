@@ -1,6 +1,6 @@
 (ns curator
   (:require ["firebase/app" :as firebase]
-            ["firebase/auth"] 
+            ["firebase/auth"]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [re-frame.core :as re-frame :refer [subscribe dispatch]]

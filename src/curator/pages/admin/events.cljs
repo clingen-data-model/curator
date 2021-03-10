@@ -1,6 +1,7 @@
 (ns curator.pages.admin.events
   (:require [re-frame.core :as re-frame]
-            [re-graph.core :as re-graph]))
+            [re-graph.core :as re-graph]
+            [cljs.pprint]))
 
 (def find-user-query
 "query($email: String) {
