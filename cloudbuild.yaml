@@ -5,3 +5,5 @@ steps:
 - name: 'gcr.io/clingen-stage/yarn-builder'
   entrypoint: 'yarn'
   args: ['release']
+- name: gcr.io/clingen-stage/firebase
+  args: ['deploy', '--project=clingen-stage', '--only=hosting']
