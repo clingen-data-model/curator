@@ -9,7 +9,6 @@
 
 (defn search []
   (let [topic @(subscribe [::subs/search-topic])
-<<<<<<< HEAD
         suggested-genes @(subscribe [::subs/suggested-genes])
         search-results @(subscribe [::subs/search-results])]
     [:section.section.home-search-main

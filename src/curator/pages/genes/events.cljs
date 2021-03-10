@@ -1,6 +1,7 @@
 (ns curator.pages.genes.events
   (:require [re-frame.core :as re-frame]
-            [re-graph.core :as re-graph]))
+            [re-graph.core :as re-graph]
+            [cljs.pprint]))
 
 (def gene-query
   "query($id: String) {
