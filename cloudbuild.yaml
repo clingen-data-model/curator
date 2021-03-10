@@ -1,7 +1,7 @@
 steps:
-- name: 'node'
+- name: 'gcr.io/clingen-stage/yarn-builder'
   entrypoint: 'yarn'
   args: ['install']
-- name: 'node'
+- name: 'gcr.io/clingen-stage/yarn-builder'
   entrypoint: 'yarn'
   args: ['release']
