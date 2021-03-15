@@ -53,7 +53,7 @@
               BACKEND_HOST)]
         (re-frame/dispatch [::re-graph/init
                             {:ws {:url (str "ws://" backend-host "/ws")}
-                             :http {:url "http://" backend-host "/api"}}]))))
+                             :http {:url (str "http://" backend-host "/api")}}]))))
   (routes/init-routes!)
   (-> (firebase/auth) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
   (mount-root))
