@@ -10,5 +10,10 @@
  :builds {:app {:output-dir "public/js"
                 :asset-path "/public/js"
                 :target :browser
+                :dev {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG false
+                                        curator.BACKEND_HOST "localhost:8888"
+                                        curator.FIREBASE_CONFIG_NAME "clingen-dev"}}
+                :release {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG true
+                                            curator.FIREBASE_CONFIG_NAME "clingen-stage"}}
                 ;; :js-options {:entry-keys ["module" "browser" "main"]}
                 :modules {:curator {:init-fn curator/init}}}}}
