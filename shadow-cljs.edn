@@ -8,7 +8,6 @@
  :nrepl {:port 55555}
  :dev-http {8080 "public/"}
  :builds {:app {:output-dir "public/js"
-                :asset-path "/public/js"
                 :target :browser
                 :dev {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG false
                                         curator.BACKEND_HOST "localhost:8888"
