@@ -42,22 +42,51 @@ query ($text: String, $suggester: Suggester) {
       :errors (:message errors))))
 
 
+;(def variant-query-str "
+;query ($subject: String) {
+;  clinical_assertions(subject: $subject) {
+;    iri
+;    id
+;    subject {name}
+;    predicate
+;    version
+;    review_status
+;    date_updated
+;    release_date
+;    collection_methods
+;    allele_origins
+;    contribution {
+;      activity_date
+;      agent
+;      agent_role
+;    }}}")
 (def variant-query-str "
-query ($subject: String) {
-  clinical_assertions(subject: $subject) {
+query ($subject: String, $timeframe: String) {
+  aggregate_assertions(subject: $subject, timeframe: $timeframe) {
     iri
     id
-    subject
+    subject {name}
     predicate
-    version
+    object
     review_status
-    date_updated
-    date_validated
-    contribution {
-      activity_date
-      agent
-      agent_role
-    }}}")
+    release_date
+    members {
+      id
+      subject {name}
+      predicate
+      object
+      review_status
+      allele_origins
+      collection_methods
+      version
+      contribution {
+        activity_date
+        agent
+        agent_role
+      }
+    }
+  }
+}")
 
 (re-frame/reg-event-fx
   :home/request-search
