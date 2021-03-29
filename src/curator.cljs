@@ -18,7 +18,8 @@
 (enable-console-print!)
 
 (goog-define BACKEND_USE_FIREBASE_CONFIG false)
-(goog-define BACKEND_HOST "localhost:8888")
+(goog-define BACKEND_WS "ws://localhost:8888/ws")
+(goog-define BACKEND_HTTP "http://localhost:8888/api")
 (goog-define FIREBASE_CONFIG_NAME "clingen-dev")
 
 (defn ^:dev/after-load mount-root []
@@ -41,7 +42,7 @@
   (let [remote-config (.remoteConfig firebase)]
     (js/console.log (str "use firebase config: " BACKEND_USE_FIREBASE_CONFIG))
     (cljs.core.async/go
-      (let [backend-host
+      (let [[backend-ws backend-http]
             (if (= true BACKEND_USE_FIREBASE_CONFIG)
               ; fetchAndActivate returns a javascript Promise which can be acquired using cljs async interop
               (do (cljs.core.async.interop/<p! (.fetchAndActivate remote-config))
@@ -50,10 +51,11 @@
                     (.log js/console (str "got BACKEND_HOST from firebase remoteConfig: " remote-config-backend-host))
                     remote-config-backend-host))
               ; Default to the BACKEND_HOST defined locally
-              BACKEND_HOST)]
+              [BACKEND_WS BACKEND_HTTP])]
+        (.log js/console "backend-ws: " backend-ws ", backend-http: " backend-http)
         (re-frame/dispatch [::re-graph/init
-                            {:ws {:url (str "ws://" backend-host "/ws")}
-                             :http {:url (str "http://" backend-host "/api")}}]))))
+                            {:ws {:url backend-ws}
+                             :http {:url backend-http}}]))))
   (routes/init-routes!)
   (-> (firebase/auth) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
   (mount-root))
