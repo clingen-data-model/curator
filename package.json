@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "watch": "shadow-cljs watch app;",
+    "watch": "shadow-cljs watch app-local;",
     "release": "shadow-cljs release ",
     "release-local": "shadow-cljs release app-local;",
     "release-dev": "shadow-cljs release app-dev;",

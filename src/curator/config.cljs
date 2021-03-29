@@ -9,7 +9,6 @@
                  :appId "1:522856288592:web:d36446a53f898c80579c55"}
    :clingen-stage {:apiKey "AIzaSyCbBq1o5ZiVB5UflVNN-zCULAIRGgkHtrk"
                    :authDomain "clingen-stage.firebaseapp.com"
-                   :databaseURL "https://clingen-stage.firebaseio.com"
                    :projectId "clingen-stage"
                    :storageBucket "clingen-stage.appspot.com"
                    :messagingSenderId "583560269534"

@@ -8,21 +8,20 @@
  :nrepl {:port 55555}
  :dev-http {8080 "public/"}
  :builds {:app-local {:output-dir "public/js"
-                :target :browser
-                :dev {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG false
-                                        curator.BACKEND_WS "ws://localhost:8888/ws"
-                                        curator.BACKEND_HTTP "http://localhost:8888/api"
-                                        curator.FIREBASE_CONFIG_NAME "clingen-dev"}}
-                :release {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG false
-                                            curator.FIREBASE_CONFIG_NAME "clingen-dev"
-                                            curator.BACKEND_WS "wss://genegraph-dev.clingen.app/ws"
-                                            curator.BACKEND_HTTP "https://genegraph-dev.clingen.app/api"}}
-                ;; :js-options {:entry-keys ["module" "browser" "main"]}
-                :modules {:curator {:init-fn curator/init}}}
+                      :target :browser
+                      :release {:closure-defines {curator.FIREBASE_CONFIG_NAME "clingen-dev"
+                                                  curator.BACKEND_WS "ws://localhost:8888/ws"
+                                                  curator.BACKEND_HTTP "http://localhost:8888/api"}}
+                      :modules {:curator {:init-fn curator/init}}}
           :app-dev {:output-dir "public/js"
-                     :target :browser
-                     :release {:closure-defines {curator.BACKEND_USE_FIREBASE_CONFIG false
-                                                 curator.FIREBASE_CONFIG_NAME "clingen-dev"
-                                                 curator.BACKEND_WS "wss://genegraph-dev.clingen.app/ws"
-                                                 curator.BACKEND_HTTP "https://genegraph-dev.clingen.app/api"}}
-                     :modules {:curator {:init-fn curator/init}}}}}
+                    :target :browser
+                    :release {:closure-defines {curator.FIREBASE_CONFIG_NAME "clingen-dev"
+                                                curator.BACKEND_WS "wss://genegraph-dev.clingen.app/ws"
+                                                curator.BACKEND_HTTP "https://genegraph-dev.clingen.app/api"}}
+                    :modules {:curator {:init-fn curator/init}}}
+          :app-stage {:output-dir "public/js"
+                      :target :browser
+                      :release {:closure-defines {curator.FIREBASE_CONFIG_NAME "clingen-stage"
+                                                  curator.BACKEND_WS "wss://genegraph-stage.clingen.app/ws"
+                                                  curator.BACKEND_HTTP "https://genegraph-stage.clingen.app/api"}}
+                      :modules {:curator {:init-fn curator/init}}}}}
