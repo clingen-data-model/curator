@@ -68,47 +68,70 @@
                      [:div.block
                       [:a {:href (rfe/href :genes gene)}
                        (:text gene)]])])
-          :variation [:div.block.table-container ;.is-widescreen
+          :variation [:div.block.table-container            ;.is-widescreen
                       {:style {;:width :100%
                                }}
-                      (let [fields [;:iri
-                                    :id
-                                    :subject
-                                    :predicate
-                                    ;:object
-                                    :version
-                                    :review_status
-                                    :date_updated
-                                    :date_validated]]
-                        [:table.table ;.is-widescreen
-                         {:style {:display :block
-                                  :height :600px
-                                  :overflow-y :scroll
-                                  ;:border-collapse :collapse
-                                  }}
-                         [:thead
-                          [:tr
-                           {:style {}}
-                           (for [field fields]
-                             ^{:key field} [:th
-                                            {:style {:background-color :white
-                                                     :border-width :1px
-                                                     :border-color :white
-                                                     :position :sticky
-                                                     :top :0px}}
-                                            field])]]
-                         [:tbody
-                          {:style {;:height :100px
-                                   ;:overflow-y :scroll
-                                   ;:display :block
-                                   }}
-                          (for [search-result (:clinical_assertions search-results)]
-                            ^{:key search-result} [:tr
-                                                   ;{:style {:display :table}}
-                                                   (for [field fields]
-                                                         ^{:key field} [:td (get search-result field)])])
-                          ]
-                         ])]
+                      (.log js/console "Search results:")
+                      (.log js/console (clj->js search-results))
+                      (for [aggregate-assertion (:aggregate_assertions search-results)]
+                        (let [id (:id aggregate-assertion)]
+                          ^{:key (str "div" id)}
+                          [:div
+                           [:table [:tbody
+                                    [:tr
+                                     [:td "Assertion Subject: "]
+                                     [:td (get-in aggregate-assertion [:subject :name])]]
+                                    [:tr
+                                     [:td "Aggregate Assertion ID: "]
+                                     [:td (:id aggregate-assertion)]]
+                                    [:tr
+                                     [:td "Assertion Predicate: "]
+                                     [:td (:predicate aggregate-assertion)]]
+                                    [:tr
+                                     [:td "Review Status: "]
+                                     [:td (:review_status aggregate-assertion)]]
+                                    ]]
+                           (let [fields [[:id :id]
+                                         [:subject #(get-in % [:subject :name])]
+                                         [:predicate :predicate]
+                                         ;:object
+                                         [:version :version]
+                                         [:review_status :review_status]
+                                         [:date_updated :date_updated]
+                                         [:release_date :release_date]
+                                         [:collection_methods :collection_methods]
+                                         [:allele_origins :allele_origins]]]
+                             ^{:key (str "table" id)}
+                             [:table.table
+                              {:style {:display :block
+                                       :height :600px
+                                       :overflow-y :scroll
+                                       ;:border-collapse :collapse
+                                       }}
+                              [:thead
+                               [:tr
+                                (for [field fields]
+                                  ^{:key field} [:th
+                                                 {:style {:background-color :white
+                                                          :border-width :1px
+                                                          :border-color :white
+                                                          :position :sticky
+                                                          :top :0px}}
+                                                 (first field)])]]
+                              [:tbody
+                               (for [single-assertion (:members aggregate-assertion)]
+                                 ^{:key single-assertion} [:tr
+                                                           (for [field fields]
+                                                             ^{:key (str single-assertion field)}
+                                                             [:td (clj->js
+                                                                    ((second field) single-assertion)
+                                                                    )])])
+                               ]
+                              ])])
+
+                        )
+
+                      ]
           [:div.notification "Unknown search topic"]
           )]
        ]]]))
