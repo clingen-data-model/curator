@@ -4,6 +4,6 @@ steps:
   args: ['install', '--frozen-lockfile', '--non-interactive', '--no-progress']
 - name: 'gcr.io/clingen-stage/yarn-builder'
   entrypoint: 'yarn'
-  args: ['release']
+  args: ['release', 'app-stage']
 - name: gcr.io/clingen-stage/firebase
   args: ['deploy', '--project=clingen-stage', '--only=hosting']
