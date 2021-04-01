@@ -5,5 +5,5 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/yarn-builder'
   entrypoint: 'yarn'
   args: ['release', '$PROJECT_ID']
-- name: gcr.io/clingen-stage/firebase
+- name: 'gcr.io/$PROJECT_ID/firebase'
   args: ['deploy', '--project=$PROJECT_ID', '--only=hosting']
