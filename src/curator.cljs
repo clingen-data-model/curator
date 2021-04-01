@@ -1,6 +1,6 @@
 (ns curator
-  (:require ["firebase/app" :as firebase-app]
-            ["firebase/auth"] ; must be loaded for firebase-app.auth to work
+  (:require ["firebase/app" :as firebase]
+            ["firebase/auth"]             ; must be loaded for firebase-app.auth to work
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [re-frame.core :as re-frame :refer [subscribe dispatch]]
@@ -33,11 +33,11 @@
   (re-frame/dispatch-sync [::initialize-db])
   (let [app-config (get firebase-config (keyword FIREBASE_CONFIG_NAME))]
     (js/console.log "app-config:" (clj->js app-config))
-    (.initializeApp firebase-app (clj->js app-config)))
+    (firebase/initializeApp (clj->js app-config)))
   (.log js/console "backend-ws: " BACKEND_WS ", backend-http: " BACKEND_HTTP)
   (re-frame/dispatch [::re-graph/init
                       {:ws {:url BACKEND_WS}
                        :http {:url BACKEND_HTTP}}])
   (routes/init-routes!)
-  (-> (.auth firebase-app) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
+  (-> (firebase/auth) (.onAuthStateChanged #(dispatch [:common/auth-state-change])))
   (mount-root))
