@@ -1,15 +1,15 @@
 {
   "scripts": {
-    "watch": "shadow-cljs watch app-local;",
+    "watch": "shadow-cljs watch local;",
     "release": "shadow-cljs release ",
-    "release-local": "shadow-cljs release app-local;",
-    "release-dev": "shadow-cljs release app-dev;",
+    "release-local": "shadow-cljs release local;",
+    "release-dev": "shadow-cljs release dev;",
     "server": "shadow-cljs server;",
     "maven": "shadow-cljs pom;"
   },
   "dependencies": {
     "create-react-class": "^15.6.3",
-    "firebase": "8.3.0",
+    "firebase": "~7.24.0",
     "firebase-tools": "9.7.0",
     "highlight.js": "10.6.0",
     "react": "^16.13.0",
