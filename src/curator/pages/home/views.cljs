@@ -4,7 +4,8 @@
             [curator.pages.home.subs :as subs]
             [curator.common.subs :as common-subs]
             [curator.pages.home.events]
-            [reitit.frontend.easy :as rfe]))
+            [reitit.frontend.easy :as rfe]
+            [clojure.string :as s]))
 
 
 (defn search []
@@ -95,6 +96,8 @@
                            (let [fields [[:id :id]
                                          [:subject #(get-in % [:subject :name])]
                                          [:classification_context :classification_context]
+                                         [:genes #(s/join ", " (map (fn [gene] (:symbol gene))
+                                                                    (get-in % [:subject :genes])))]
                                          [:predicate :predicate]
                                          ;:object
                                          [:version :version]
