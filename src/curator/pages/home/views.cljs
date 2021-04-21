@@ -91,13 +91,15 @@
                                      [:td "Review Status: "]
                                      [:td (:review_status aggregate-assertion)]]
                                     ]]
+                           ; Fields within member assertions
                            (let [fields [[:id :id]
                                          [:subject #(get-in % [:subject :name])]
+                                         [:classification_context :classification_context]
                                          [:predicate :predicate]
                                          ;:object
                                          [:version :version]
                                          [:review_status :review_status]
-                                         [:date_updated :date_updated]
+                                         [:last_updated #(get-in % [:contribution :activity_date])]
                                          [:release_date :release_date]
                                          [:collection_methods :collection_methods]
                                          [:allele_origins :allele_origins]]]

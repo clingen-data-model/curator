@@ -72,10 +72,16 @@ query ($subject: String, $timeframe: String) {
     release_date
     members {
       id
-      subject {name}
+      subject {
+        id
+        name
+        genes {symbol}
+      }
+      classification_context
       predicate
       object
       review_status
+      release_date
       allele_origins
       collection_methods
       version
@@ -97,7 +103,8 @@ query ($subject: String, $timeframe: String) {
       (case topic
         :variation (let [fx {:dispatch [::re-graph/query
                                         variant-query-str
-                                        {:subject search-text}
+                                        {:subject search-text
+                                         :timeframe "LATEST"}
                                         [:home/receive-search-results]
                                         ]}]
                      (.log js/console fx)
